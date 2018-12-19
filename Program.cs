@@ -1,6 +1,7 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +14,7 @@ namespace SignalRTester
     [HelpOption("-?")]
     internal class Program
     {
-        private readonly bool Exit = false;
+        private bool Exit = false;
         private HubConnection connection;
 
         public static int Main(string[] args)
@@ -60,6 +61,7 @@ namespace SignalRTester
                             Subscribe(parameter);
                             break;
                         case "exit":
+                            Exit = true;
                             Environment.Exit(-1);
                             break;
                     }
@@ -71,15 +73,24 @@ namespace SignalRTester
 
         private void Send(string methodName)
         {
-            List<string> parameters = new List<string>();
+            List<object> parameters = new List<object>();
             string parameter = string.Empty;
             do
             {
                 parameter = Prompt.GetString(
                     "Write the parameters and press enter or just press enter to send a message without parameters");
+
                 if (!string.IsNullOrWhiteSpace(parameter))
                 {
-                    parameters.Add(parameter);
+                    try
+                    {
+                        object newObject = JsonConvert.DeserializeObject(parameter);
+                        parameters.Add(newObject);
+                    }
+                    catch
+                    {
+                        parameters.Add(parameter);
+                    }
                 }
             } while (!string.IsNullOrWhiteSpace(parameter));
 
@@ -88,7 +99,7 @@ namespace SignalRTester
 
         private void SetupConnection()
         {
-            var builder = new HubConnectionBuilder()
+            IHubConnectionBuilder builder = new HubConnectionBuilder()
                 .WithUrl(Url);
 
             if (Trace)
@@ -103,7 +114,7 @@ namespace SignalRTester
                 });
             }
 
-            this.connection=builder.Build();
+            connection = builder.Build();
 
             connection.Closed += async (error) =>
             {
@@ -140,12 +151,12 @@ namespace SignalRTester
 
             connection.On(method, types.ToArray(), (x) =>
             {
-                var task = new Task(() =>
+                Task task = new Task(() =>
                 {
                     Console.WriteLine("Message Received: " + method);
                     foreach (object message in x)
                     {
-                        Console.WriteLine("Parameter ---------- " );
+                        Console.WriteLine("Parameter ---------- ");
                         Console.WriteLine(message);
                         Console.WriteLine("--------- ---------- ");
                     }

@@ -11,6 +11,8 @@ dotnet SignalRTester.dll --url http://yoursupersignalrhub/realtimehub
 
 To send a message to the method specified in your endpoint. You can write the parameters one by one or just press enter to send the message without parameters.
 
+Parameters can be a plain string or in a json format if the endpoint is expecting a complex data.
+
 ## observe method_name
 
 Observe the messages sent by the server. You have to specify the number of expected parameters due to signalR binding limitations
@@ -66,6 +68,10 @@ Start with
     "ready": false
   }
   --------- ----------
+
+  >send JoinWithDto
+  >{"description":"value for description"}
+  >(enter)
 ```
 
 
