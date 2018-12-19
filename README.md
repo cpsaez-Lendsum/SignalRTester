@@ -7,13 +7,15 @@ How to launch
 dotnet SignalRTester.dll --url http://yoursupersignalrhub/realtimehub
 ```
 
-## send methodname
+## send method_name
 
 To send a message to the method specified in your endpoint. You can write the parameters one by one or just press enter to send the message without parameters.
 
-## observe methodname
+## observe method_name
 
 Observe the messages sent by the server. You have to specify the number of expected parameters due to signalR binding limitations
+
+## Example
 
 Example of session with a server endpoint who accept a Join method
 ```
