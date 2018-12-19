@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SignalRTester": {
+      "commandName": "Project",
+      "commandLineArgs": "--url http://localhost:44355/pitgamehub"
+    }
+  }
+}

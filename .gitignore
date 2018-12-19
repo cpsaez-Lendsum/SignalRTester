@@ -3,3 +3,7 @@
 ################################################################################
 
 /.vs/SignalRTester/DesignTimeBuild
+/.vs/SignalRTester/v15/Server/sqlite3
+/.vs/SignalRTester/v15
+/bin/Debug
+/obj
